@@ -25,7 +25,7 @@ SECRET_KEY = 'ng8@vghw$@v9419^9sl7u6)lu!mc%!6t_s3_aw6zo#$k_#3(sp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 
 # Application definition
@@ -73,6 +73,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'recruitment.wsgi.application'
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}
 
 
 # Database

@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 
 from django.conf import settings
 from django.db import models
@@ -9,9 +9,14 @@ class Account(models.Model):
     Account model holds current balance of every user.
     """
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    balance = models.DecimalField(decimal_places=2, max_digits=10)
+    balance = models.DecimalField(decimal_places=2, max_digits=10, default=0)
 
     def change_balance(self, amount):
+        operation = Operation.objects.create(balance_before=self.balance,
+                                             amount=amount,
+                                             account=self)
+
+        assert operation, "Could not create operation"
         self.balance += amount
         self.save()
 
@@ -21,7 +26,7 @@ class Operation(models.Model):
     in the Operation model for auditing purposes.
     """
     balance_before = models.DecimalField(decimal_places=2, max_digits=11)
-    balance_after = models.DecimalField(decimal_places=2, max_digits=11)
+    amount = models.DecimalField(decimal_places=2, max_digits=10)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
 
@@ -36,7 +41,7 @@ class Purchase(models.Model):
     """
     Model stores data about purchases.
     """
-    dt_when = models.DateTimeField(default=datetime.now)
+    dt_when = models.DateTimeField(default=timezone.now)
     books = models.ManyToManyField(Book)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
