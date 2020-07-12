@@ -1,6 +1,5 @@
 from django.utils import timezone
 
-from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -16,7 +15,6 @@ class Account(models.Model):
                                              amount=amount,
                                              account=self)
 
-        assert operation, "Could not create operation"
         self.balance += amount
         self.save()
 

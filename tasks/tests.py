@@ -28,8 +28,8 @@ class ViewsTest(TestCase):
         resp = self.client.post('/books/buy/',
                                 data=json.dumps({"books": [b1.id, b2.id]}),
                                 content_type='application/json')
-        self.assertEqual(resp.status_code, status.HTTP_406_NOT_ACCEPTABLE)
-        self.assertEqual(json.loads(resp.content), {"books":[],"amount":0})
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(json.loads(resp.content), ['No books selected to buy.'])
         self.assertEqual(acc.purchase_set.count(), 0)
         self.assertEqual(acc.balance, 0)
 
